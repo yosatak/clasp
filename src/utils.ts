@@ -167,8 +167,11 @@ export const getApiFileType = (value: string): string => {
  */
 // If using a proxy, return true since `isOnline` doesn't work.
 // @see https://github.com/googleapis/google-api-nodejs-client#using-a-proxy
-export const safeIsOnline = async (): Promise<boolean> =>
-  Boolean(process.env.HTTP_PROXY || process.env.HTTPS_PROXY) || isOnline();
+export const safeIsOnline = async (): Promise<boolean> => {
+  const ipv4: isOnline.Options = {version: 'v4'};
+  const ipv6: isOnline.Options = {version: 'v6'};
+  return Boolean(process.env.HTTP_PROXY || process.env.HTTPS_PROXY) || isOnline(ipv4) || isOnline(ipv6);
+};
 
 /**
  * Checks if the network is available. Gracefully exits if not.
